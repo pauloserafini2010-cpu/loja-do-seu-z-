@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loja do Seu Zé</title>
+
+<style>
+body { margin: 0; font-family: 'Segoe UI', Arial; background: #0f172a; color:white; }
+header { background: linear-gradient(90deg, #0f172a, #1e293b); padding: 20px; text-align: center; }
+
+nav { background: #020617; padding: 12px; text-align: center; position: sticky; top:0; }
+nav a { color: white; margin: 0 15px; cursor:pointer; font-weight:bold; }
+
+.topbar { display:flex; justify-content:space-between; padding:10px 20px; background:#020617; }
+
+button { cursor:pointer; border:none; }
+
+.btn { background:#22c55e; color:white; padding:10px; border-radius:8px; font-weight:bold; }
+.btn:hover { background:#16a34a; }
+
+.filtros { padding:15px; text-align:center; }
+.filtros button { margin:5px; padding:8px 12px; border-radius:6px; background:#334155; color:white; }
+
+.container { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; padding:20px; }
+.produto { background:#1e293b; padding:15px; border-radius:12px; text-align:center; transition:0.2s; }
+.produto:hover { transform:scale(1.05); }
+.produto img { width:100%; height:150px; object-fit:cover; border-radius:10px; }
+.preco { color:#22c55e; font-weight:bold; }
+
+.hero { text-align:center; padding:60px 20px; background:linear-gradient(90deg,#020617,#1e293b); }
+.hero h1 { font-size:42px; }
+.hero p { color:#cbd5f5; }
+
+#carrinhoBox { position:fixed; right:-350px; top:0; width:350px; height:100%; background:#020617; padding:20px; transition:0.3s; overflow:auto; }
+#carrinhoBox.ativo { right:0; }
+
+.itemCarrinho { display:flex; justify-content:space-between; margin-bottom:10px; }
+
+.page { display:none; }
+.ativo { display:block; }
+
+form { max-width:400px; margin:auto; background:#1e293b; padding:20px; border-radius:10px; }
+form input { width:100%; margin-bottom:10px; padding:8px; }
+
+</style>
+</head>
+<body>
+
+<header>
+    
+<h1>Loja do Seu Zé</h1>
+<p>A Loja do Seu Zé é o seu destino completo para eletrônicos e produtos gamer. Oferecemos computadores, celulares e acessórios com os melhores preços, qualidade garantida e entrega rápida para todo o Brasil. 🔥</p>
+</header>
+
+<nav>
+<a onclick="trocarPagina('home')">Home</a>
+<a onclick="trocarPagina('produtos')">Produtos</a>
+<a onclick="trocarPagina('cadastro')">Cadastro</a>
+</nav>
+
+<div class="topbar">
+<button class="btn" onclick="toggleCarrinho()">🛒 Carrinho (<span id="total">0</span>)</button>
+</div>
+
+<!-- HOME -->
+<div id="home" class="page ativo">
+<div class="hero">
+
+<img src="lojaseuzé.jpg" style="width:100%; max-width:900px; border-radius:12px; margin-bottom:20px;">
+
+<h1>Monte seu Setup Gamer 🎮</h1>
+<p>Os melhores produtos com preço baixo</p>
+<button class="btn" onclick="trocarPagina('produtos')">Ver Produtos</button>
+
+</div>
+</div>
+
+<!-- PRODUTOS -->
+<div id="produtos" class="page">
+
+<div class="filtros">
+<button onclick="filtrar('all')">Todos</button>
+<button onclick="filtrar('pc')">PC</button>
+<button onclick="filtrar('celular')">Celular</button>
+<button onclick="filtrar('acessorio')">Acessório</button>
+</div>
+
+<section class="container">
+
+<!-- 12 PRODUTOS -->
+<div class="produto" data-cat="pc">
+<img src="https://images.kabum.com.br/produtos/fotos/sync_mirakl/715914/xlarge/PC-Gamer-Ryzen-7-5700x-32gb-Ddr4-3200mhz-RTX-4060-8GB-SSD-1TB-Nvme-Branco-Full-White-Premium-Water-Cooler-RGB-E-Cabos-Sleeved_1739825434.png">
+
+<h3>PC Gamer</h3>
+
+<select id="configPC" onchange="mudarPreco()" onclick="this.classList.add('ativoSelect')" onblur="this.classList.remove('ativoSelect')">
+
+<option value="3500">🟢 Básico - 16GB RAM / GTX 1660 / SSD 500GB</option>
+<option value="5500" selected>🔥 Intermediário - 32GB RAM / RTX 4060 / SSD 1TB</option>
+<option value="7500">🚀 Ultra - 64GB RAM / RTX 4070 / SSD 2TB</option>
+
+</select>
+
+<p class="preco">R$ <span id="precoPC">5500</span></p>
+
+<button class="btn" onclick="comprarPC()">Comprar</button>
+</div>
+
+<style>
+select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  background: #334155;
+  color: white;
+  font-size: 12px;
+  transition: 0.2s;
+  outline: none;
+}
+
+select.ativoSelect {
+  font-size: 14px;
+  transform: scale(1.05);
+}
+
+select option {
+  font-size: 14px;
+}
+</style>
+
+<script>
+function mudarPreco(){
+  let preco = document.getElementById("configPC").value;
+  document.getElementById("precoPC").innerText = preco;
+}
+
+function comprarPC(){
+  let select = document.getElementById("configPC");
+  let nome = select.options[select.selectedIndex].text;
+  let preco = parseInt(select.value);
+
+  addCarrinho(nome, preco);
+}
+</script>
+
+<div class="produto" data-cat="pc">
+<img src="https://images.tcdn.com.br/img/img_prod/15959/monitor_gamer_24_samsung_full_hd_75hz_freesync_ips_hdmi_lf24t350fh_18411_1_2f723e7daad731d2bcc5e35dd1f2ffc7.jpg">
+<h3>Monitor 24</h3>
+<p class="preco">R$ 900</p>
+<button class="btn" onclick="addCarrinho('Monitor',900)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="celular">
+<img src="https://trocafone.vtexassets.com/arquivos/ids/338538/smpapl0030meno-p.jpg">
+<h3>iPhone 13</h3>
+<p class="preco">R$ 3500</p>
+<button class="btn" onclick="addCarrinho('iPhone',3500)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="celular">
+<img src="https://gazin-images.gazin.com.br/tsU0-87772jZjoIvGLBmlmFbfPA=/1920x/filters:format(webp):quality(75)/https://gazin-marketplace.s3.amazonaws.com/midias/imagens/2024/06/smartphone-samsung-galaxy-s24-ultra-5g-octa-core-256gb-12gb-camera-200mp-com-ia-122406211849.jpg">
+<h3>Galaxy S24</h3>
+<p class="preco">R$ 1900</p>
+<button class="btn" onclick="addCarrinho('Galaxy',1900)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="acessorio">
+<img src="https://cdn.shoppub.io/cdn-cgi/image/w=1000,h=1000,q=80,f=auto/oficinadosbits/media/uploads/produtos/foto/lcunpvzb/file.png">
+<h3>Fone Bluetooth</h3>
+<p class="preco">R$ 250</p>
+<button class="btn" onclick="addCarrinho('Fone',250)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="acessorio">
+<img src="https://cdn.dooca.store/151246/products/hyvrpn8leji868ftasest4wv2ghdcdmr9xry_640x640+fill_ffffff.jpg?v=1724029588&webp=0">
+<h3>Teclado RGB</h3>
+<p class="preco">R$ 180</p>
+<button class="btn" onclick="addCarrinho('Teclado',180)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="acessorio">
+<img src="https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/9/1/910-0073019.jpg">
+<h3>Mouse Gamer</h3>
+<p class="preco">R$ 120</p>
+<button class="btn" onclick="addCarrinho('Mouse',120)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="acessorio">
+<img src="https://www.logitechstore.com.br/media/catalog/product/cache/105e6f420716e0751863c4b81f527d17/l/o/logitech098.png">
+<h3>Headset</h3>
+<p class="preco">R$ 320</p>
+<button class="btn" onclick="addCarrinho('Headset',320)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="acessorio">
+<img src="https://cdn.awsli.com.br/2500x2500/53/53761/produto/21562856/483dde0b04.jpg">
+<h3>Controle Xbox</h3>
+<p class="preco">R$ 450</p>
+<button class="btn" onclick="addCarrinho('Controle',450)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="acessorio">
+<img src="https://images.tcdn.com.br/img/img_prod/1157659/caixa_de_som_bluetooth_a_prova_de_agua_22094_1_f8453b2c3046e297f68d76bd94c78705.png">
+<h3>Caixa de Som</h3>
+<p class="preco">R$ 280</p>
+<button class="btn" onclick="addCarrinho('Caixa',280)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="pc">
+<img src="https://lojaibyte.vteximg.com.br/arquivos/ids/183028-1200-1200/36138-1-ssd-kingston-2-5-240gb-a400-sata-iii-sa400s37-240g-min.jpg?v=637237039450300000">
+<h3>SSD 1TB</h3>
+<p class="preco">R$ 400</p>
+<button class="btn" onclick="addCarrinho('SSD',400)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="pc">
+<img src="https://cdn.shoppub.io/cdn-cgi/image/w=1000,h=1000,q=80,f=auto/oficinadosbits/media/uploads/produtos/foto/oganqsig/file.png">
+<h3>Placa de Vídeo</h3>
+<p class="preco">R$ 2500</p>
+<button class="btn" onclick="addCarrinho('GPU',2500)">Comprar</button>
+</div>
+
+</section>
+<section class="container">
+
+<!-- PC GAMER COM CONFIG -->
+<div class="produto" data-cat="pc">
+<img src="https://cdn.awsli.com.br/800x800/2443/2443989/produto/220565801772f28fb88.jpg">
+
+<h3>PC Gamer</h3>
+
+<select id="configPC" onchange="mudarPreco()" onclick="this.classList.add('ativoSelect')" onblur="this.classList.remove('ativoSelect')">
+<option value="3500">🟢 Básico - 16GB RAM / GTX 1660</option>
+<option value="5500" selected>🔥 Intermediário - 32GB / RTX 4060</option>
+<option value="7500">🚀 Ultra - 64GB / RTX 4070</option>
+</select>
+
+<p class="preco">R$ <span id="precoPC">9500</span></p>
+<button class="btn" onclick="comprarPC()">Comprar</button>
+</div>
+
+<!-- NOVOS PRODUTOS -->
+<div class="produto" data-cat="pc">
+<img src="https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/g/6/g614ju-n3380w.jpg">
+<h3>Notebook Gamer</h3>
+<p class="preco">R$ 4200</p>
+<button class="btn" onclick="addCarrinho('Notebook Gamer',4200)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="pc">
+<img src="https://img.terabyteshop.com.br/produto/g/memoria-ddr4-kingston-fury-beast-rgb-16gb-2x8gb-3200mhz-preto-kf432c16bb2ak216_178475.jpg">
+<h3>Memória RAM 16GB</h3>
+<p class="preco">R$ 300</p>
+<button class="btn" onclick="addCarrinho('RAM 16GB',300)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="pc">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtIkN_v_UpCbR_Zvfy8fbSP--Ohjgam1TL-Q&s">
+<h3>Ryzen 5</h3>
+<p class="preco">R$ 800</p>
+<button class="btn" onclick="addCarrinho('Ryzen 5',800)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="celular">
+<img src="https://m.media-amazon.com/images/I/51nj2ICJyeL._AC_UF1000,1000_QL80_.jpg">
+<h3>iPhone 17</h3>
+<p class="preco">R$ 3500</p>
+<button class="btn" onclick="addCarrinho('iPhone',3500)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="celular">
+<img src="https://i02.appmifile.com/994_operatorx_operatorx_opx/11/01/2024/72a71b312950178179eeb71425ef8def.png">
+<h3>Xiaomi Redmi Note 13</h3>
+<p class="preco">R$ 1200</p>
+<button class="btn" onclick="addCarrinho('Xiaomi',1200)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="celular">
+<img src="https://m.media-amazon.com/images/I/610ZS136aKL.jpg">
+<h3>Motorola Edge</h3>
+<p class="preco">R$ 1600</p>
+<button class="btn" onclick="addCarrinho('Motorola',1600)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="acessorio">
+<img src="https://cdn.shoppub.io/cdn-cgi/image/w=1000,h=1000,q=80,f=auto/oficinadosbits/media/uploads/produtos/foto/ahthsvbz/file.png">
+<h3>Fone Bluetooth</h3>
+<p class="preco">R$ 250</p>
+<button class="btn" onclick="addCarrinho('Fone',250)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="acessorio">
+<img src="https://m.media-amazon.com/images/I/61nSvG2CHQL.jpg">
+<h3>Mousepad RGB</h3>
+<p class="preco">R$ 90</p>
+<button class="btn" onclick="addCarrinho('Mousepad',90)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="acessorio">
+<img src="https://m.media-amazon.com/images/I/61STMa3J3oL.jpg">
+<h3>Webcam</h3>
+<p class="preco">R$ 150</p>
+<button class="btn" onclick="addCarrinho('Webcam',150)">Comprar</button>
+</div>
+
+<div class="produto" data-cat="acessorio">
+<img src="https://cdn.awsli.com.br/2500x2500/2539/2539199/produto/209878758/2-cadeira-jupiter-black-e-red-oct4sm8vxl.png">
+<h3>Cadeira Gamer</h3>
+<p class="preco">R$ 950</p>
+<button class="btn" onclick="addCarrinho('Cadeira',950)">Comprar</button>
+</div>
+
+</section>
+</div>
+
+<!-- CADASTRO -->
+<div id="cadastro" class="page">
+<form onsubmit="cadastrar(event)">
+<input placeholder="Nome" required>
+<input placeholder="Email" required>
+<input placeholder="Senha" required>
+<button class="btn">Cadastrar</button>
+</form>
+</div>
+
+<!-- CARRINHO -->
+<div id="carrinhoBox">
+<h2>Carrinho</h2>
+<div id="lista"></div>
+<h3>Total: R$ <span id="valor">0</span></h3>
+<button class="btn" style="width:100%; margin-top:10px;" onclick="abrirCheckout()">
+💳 Ir para Pagamento
+</button>
+</div>
+
+<script>
+let total=0, valor=0;
+function trocarPagina(p){document.querySelectorAll('.page').forEach(e=>e.classList.remove('ativo'));document.getElementById(p).classList.add('ativo');}
+function addCarrinho(n,p){total++;valor+=p;document.getElementById('total').innerText=total;document.getElementById('valor').innerText=valor;let d=document.createElement('div');d.className='itemCarrinho';d.innerHTML=`${n} - R$ ${p} <button onclick="this.parentElement.remove();remover(${p})">❌</button>`;lista.appendChild(d);} 
+function remover(p){total--;valor-=p;total<0?total=0:0;valor<0?valor=0:0;total.innerText=total;document.getElementById('valor').innerText=valor;}
+function toggleCarrinho(){carrinhoBox.classList.toggle('ativo');}
+function filtrar(c){document.querySelectorAll('.produto').forEach(p=>{p.style.display=(c==='all'||p.dataset.cat===c)?'block':'none'})}
+function cadastrar(e){e.preventDefault();alert('Cadastro realizado!');}
+</script>
+
+<div id="checkoutBox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000000cc; justify-content:center; align-items:center;">
+
+<div style="background:#020617; padding:25px; border-radius:12px; width:350px; text-align:center;">
+
+<h2>💳 Finalizar Compra</h2>
+
+<p>Total: <strong>R$ <span id="totalCheckout">0</span></strong></p>
+
+<select id="pagamento" style="width:100%; padding:10px; margin:10px 0;">
+<option value="pix">PIX</option>
+<option value="cartao">Cartão</option>
+</select>
+
+<div id="pixArea" style="display:none;">
+<p>Escaneie o QR Code:</p>
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=pagamento-pix" />
+</div>
+
+<input placeholder="CEP (frete)" id="cep" style="width:100%; padding:10px; margin:10px 0;">
+<p id="frete"></p>
+
+<button class="btn" onclick="confirmarCompra()">Confirmar Compra</button>
+<br><br>
+<button onclick="fecharCheckout()" style="background:#ef4444; color:white; padding:8px; border-radius:6px;">Cancelar</button>
+
+</div>
+</div>
+</body>
+</html>

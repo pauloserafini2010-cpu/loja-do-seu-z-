@@ -1,0 +1,28 @@
+.hero {
+  text-align: center;
+  padding: 120px 20px;
+  
+  background-image: url('lojaseuzé.jpg'); /* lojaseuzé.jpg */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  position: relative;
+}
+
+/* overlay escuro pra dar contraste (igual site grande) */
+.hero::before {
+  content: "";
+  position: absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.5);
+}
+
+/* garante que o texto fique na frente */
+.hero * {
+  position: relative;
+  z-index: 1;
+}
